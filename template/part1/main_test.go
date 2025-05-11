@@ -7,9 +7,9 @@ import (
 )
 
 func TestInput(t *testing.T) {
-	test.AssertFileInput(t, Run, "-1", "input.txt")
+	test.AssertFileInput(t, run, "-1", "input.txt")
 }
 
 func TestExample(t *testing.T) {
-	test.AssertStringInput(t, Run, "-1", "example")
+	test.AssertStringInput(t, run, "-1", "example")
 }

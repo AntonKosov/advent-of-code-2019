@@ -9,11 +9,11 @@ import (
 )
 
 func main() {
-	Run(os.Stdin, os.Stdout)
+	run(os.Stdin, os.Stdout)
 	fmt.Println()
 }
 
-func Run(reader io.Reader, writer io.Writer) {
+func run(reader io.Reader, writer io.Writer) {
 	inputData := read(reader)
 	answer := process(inputData)
 	fmt.Fprint(writer, answer)
