@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"io"
+	"os"
 	"strings"
 
 	"github.com/AntonKosov/advent-of-code-2019/aoc/input"
@@ -10,12 +12,18 @@ import (
 )
 
 func main() {
-	answer := process(read())
-	fmt.Printf("Answer: %v\n", answer)
+	Run(os.Stdin, os.Stdout)
+	fmt.Println()
 }
 
-func read() []int {
-	lines := input.Lines()
+func Run(reader io.Reader, writer io.Writer) {
+	inputData := read(reader)
+	answer := process(inputData)
+	fmt.Fprint(writer, answer)
+}
+
+func read(reader io.Reader) []int {
+	lines := input.Lines(reader)
 	nums := strings.Split(lines[0], ",")
 
 	return slice.Map(nums, func(num string) int { return transform.StrToInt(num) })
