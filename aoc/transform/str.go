@@ -16,6 +16,10 @@ func StrToInts(str string) []int {
 	return slice.Map(parseNums(str), func(num string) int { return StrToInt(num) })
 }
 
+func StrToInt64(str string) int64 {
+	return must.Return(strconv.ParseInt(str, 10, 64))
+}
+
 func StrToUInt64(str string) uint64 {
 	return must.Return(strconv.ParseUint(str, 10, 64))
 }
