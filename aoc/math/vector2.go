@@ -1,6 +1,9 @@
 package math
 
-import "fmt"
+import (
+	"fmt"
+	builtinmath "math"
+)
 
 type Vector2[T Numbers] struct {
 	X T
@@ -29,6 +32,18 @@ func (v Vector2[T]) ManhattanDst(v2 Vector2[T]) T {
 
 func (v Vector2[T]) Norm() Vector2[T] {
 	return NewVector2(T(Sign(v.X)), T(Sign(v.Y)))
+}
+
+func (v Vector2[T]) DotProduct(av Vector2[T]) T {
+	return v.X*av.X + v.Y*av.Y
+}
+
+func (v Vector2[T]) Length() float64 {
+	return builtinmath.Sqrt(float64(v.X*v.X + v.Y*v.Y))
+}
+
+func (v Vector2[T]) AngleRad(av Vector2[T]) float64 {
+	return builtinmath.Acos(float64(v.DotProduct(av)) / (v.Length() * av.Length()))
 }
 
 // RotateLeft rotates the vector to the left (left-handed system)

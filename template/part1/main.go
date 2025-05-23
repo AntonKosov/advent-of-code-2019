@@ -26,6 +26,6 @@ func read(reader io.Reader) []string {
 	return lines
 }
 
-func process(_ []string) int {
-	return -1
+func process(_ []string) string {
+	return ""
 }
