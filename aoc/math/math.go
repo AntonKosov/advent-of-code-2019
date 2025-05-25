@@ -1,7 +1,7 @@
 package math
 
 type Numbers interface {
-	int8 | int | uint64
+	int8 | int | int64 | uint64
 }
 
 func Abs[T Numbers](v T) T {
