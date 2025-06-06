@@ -8,7 +8,7 @@ import (
 	"sync"
 
 	"github.com/AntonKosov/advent-of-code-2019/aoc/math"
-	"github.com/AntonKosov/advent-of-code-2019/day15/part2/program"
+	"github.com/AntonKosov/advent-of-code-2019/day15/part1/program"
 )
 
 type Tile rune
