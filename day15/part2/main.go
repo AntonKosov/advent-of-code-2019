@@ -80,7 +80,12 @@ func process(code []int64) int {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		program.Run(ctx, code, input, output)
+		program.Run(
+			ctx,
+			code,
+			func() int64 { return <-input },
+			func(v int64) { output <- v },
+		)
 	}()
 
 	startPos := math.NewVector2(0, 0)

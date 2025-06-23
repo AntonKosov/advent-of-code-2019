@@ -6,7 +6,6 @@ import (
 	"io"
 	"os"
 	"strings"
-	"sync"
 
 	"github.com/AntonKosov/advent-of-code-2019/aoc/slice"
 	"github.com/AntonKosov/advent-of-code-2019/day15/part1/program"
@@ -53,21 +52,7 @@ func alignmentParameters(scaffold [][]rune) int {
 
 func readScaffold(code []int64) [][]rune {
 	var sb strings.Builder
-
-	output := make(chan int64)
-	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		for out := range output {
-			sb.WriteByte(byte(out))
-		}
-	}()
-
-	program.Run(context.Background(), code, nil, output)
-
-	close(output)
-	wg.Wait()
+	program.Run(context.Background(), code, nil, func(v int64) { sb.WriteByte(byte(v)) })
 
 	return slice.Map(strings.Split(sb.String(), "\n"), func(line string) []rune {
 		return []rune(line)

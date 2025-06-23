@@ -22,13 +22,13 @@ func Parse(reader io.Reader) []int64 {
 type computer struct {
 	code         []int64
 	position     int
-	input        <-chan int64
-	output       chan<- int64
+	input        func() int64
+	output       func(int64)
 	relativeBase int
 	commands     map[int]func(context.Context) (offset int)
 }
 
-func Run(ctx context.Context, code []int64, input <-chan int64, output chan<- int64) {
+func Run(ctx context.Context, code []int64, input func() int64, output func(int64)) {
 	c := computer{code: code, input: input, output: output}
 	c.commands = map[int]func(context.Context) (offset int){
 		1: c.sumCommand,
@@ -68,20 +68,29 @@ func (c *computer) mulCommand(context.Context) (offset int) {
 }
 
 func (c *computer) inputCommand(ctx context.Context) (offset int) {
+	ch := make(chan struct{})
+	go func() {
+		c.set(1, c.input())
+		close(ch)
+	}()
 	select {
-	case v := <-c.input:
-		c.set(1, v)
-		return 2
 	case <-ctx.Done():
 		return 0
+	case <-ch:
+		return 2
 	}
 }
 
 func (c *computer) outputCommand(ctx context.Context) (offset int) {
+	ch := make(chan struct{})
+	go func() {
+		c.output(c.get(1))
+		close(ch)
+	}()
 	select {
 	case <-ctx.Done():
 		return 0
-	case c.output <- c.get(1):
+	case <-ch:
 		return 2
 	}
 }

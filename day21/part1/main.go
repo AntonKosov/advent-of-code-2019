@@ -65,7 +65,12 @@ func process(code []int64) int64 {
 		}
 	}()
 
-	program.Run(context.Background(), code, input, output)
+	program.Run(
+		context.Background(),
+		code,
+		func() int64 { return <-input },
+		func(v int64) { output <- v },
+	)
 
 	wg.Wait()
 

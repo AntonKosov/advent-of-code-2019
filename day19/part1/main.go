@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"sync"
 
 	"github.com/AntonKosov/advent-of-code-2019/day15/part1/program"
 )
@@ -49,18 +48,15 @@ func affectedPoint(code []int64, x, y int) bool {
 	input <- int64(x)
 	input <- int64(y)
 
-	output := make(chan int64)
+	output := make(chan int64, 1)
 	defer close(output)
 
-	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		program.Run(context.Background(), code, input, output)
-	}()
+	go program.Run(
+		context.Background(),
+		code,
+		func() int64 { return <-input },
+		func(v int64) { output <- v },
+	)
 
-	affected := <-output == 1
-	wg.Wait()
-
-	return affected
+	return <-output == 1
 }
