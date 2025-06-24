@@ -1,7 +1,7 @@
 package math
 
 type Numbers interface {
-	int8 | int | int64 | uint64
+	int8 | int | uint32 | int64 | uint64
 }
 
 func Abs[T Numbers](v T) T {
@@ -56,4 +56,14 @@ func LCM[T Numbers](nums ...T) T {
 	}
 
 	return a * b / GCD(a, b)
+}
+
+func BitsCount[T Numbers](value T) int {
+	count := 0
+	for value != 0 {
+		count++
+		value = value & (value - 1)
+	}
+
+	return count
 }
